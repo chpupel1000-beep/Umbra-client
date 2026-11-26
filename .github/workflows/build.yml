@@ -1,0 +1,39 @@
+name: build
+on:
+  push:
+  workflow_dispatch:
+jobs:
+  glassdls:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: 8.12
+      - run: unzip -o killaura.zip -d proj
+      - run: cd proj/killaura && gradle build --no-daemon
+      - uses: actions/upload-artifact@v4
+        with:
+          name: killaura-jar
+          path: proj/killaura/build/libs/*.jar
+  umbra:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: 8.12
+      - run: unzip -o umbra.zip -d proj
+      - run: cd proj/umbra && gradle build --no-daemon
+      - uses: actions/upload-artifact@v4
+        with:
+          name: umbra-jar
+          path: proj/umbra/build/libs/*.jar
